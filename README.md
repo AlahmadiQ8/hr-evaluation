@@ -128,15 +128,21 @@ aspire stop
 
 - **`.github/workflows/ci.yml`** — on push/PR: restore, build, run the unit tests, then a
   Playwright E2E job that starts the app with Aspire and tests it.
-- **`.github/workflows/deploy.yml`** — **manual-only** (`workflow_dispatch`). Deploys to
-  Azure via `aspire deploy` once the `production` GitHub Environment is configured.
+- **`.github/workflows/deploy-staging.yml`** — deploys to the **staging** resource group via
+  `aspire deploy` after CI succeeds on `main`, then verifies `/health` and `/version`.
+- **`.github/workflows/deploy-production.yml`** — **release-gated**: publishing a GitHub Release
+  deploys that exact tag to **production** behind the `production` environment's required
+  reviewers, and verifies the deployed `/version` matches the release.
+- **`.github/workflows/release-changelog.yml`** — on release, generates a human-friendly changelog
+  with **GitHub Models** (`actions/ai-inference`) and updates the release notes.
 
 ## Azure deployment
 
-Deployment is **prepared but deferred**. The local SQL Server maps to **Azure SQL Database** via
-`AddAzureSqlServer(...).RunAsContainer()`, so `aspire deploy` provisions Azure SQL and hosts the
-API and UI on Azure Container Apps with no application code changes. See
-[`docs/azure-deployment.md`](docs/azure-deployment.md).
+Two environments — **staging** and **production** — separated by resource group, deployed
+**Aspire-native** (`aspire deploy`). The local SQL Server maps to a private **Azure SQL Database**,
+and the API + Blazor UI run on **Azure Container Apps** (only the web app is public) with managed
+identity, Application Insights, and a virtual network. See
+[`docs/azure-deployment.md`](docs/azure-deployment.md) for setup, gating, and verification.
 
 ## License
 
