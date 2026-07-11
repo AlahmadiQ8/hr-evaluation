@@ -94,4 +94,211 @@
   <data name="Reload" xml:space="preserve">
     <value>Reload</value>
   </data>
+  <data name="Nav_Inbox" xml:space="preserve">
+    <value>My Inbox</value>
+  </data>
+  <data name="Nav_Calibration" xml:space="preserve">
+    <value>HR Calibration</value>
+  </data>
+  <data name="Nav_Organization" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Choose a demo persona</value>
+  </data>
+  <data name="Login_Subtitle" xml:space="preserve">
+    <value>Sign in as any seeded persona — no password required. All data is fictional.</value>
+  </data>
+  <data name="Login_SignInAs" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Persona_SignedInAs" xml:space="preserve">
+    <value>Signed in as</value>
+  </data>
+  <data name="Persona_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Common_Loading" xml:space="preserve">
+    <value>Loading…</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common_None" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="Inbox_Title" xml:space="preserve">
+    <value>My Inbox</value>
+  </data>
+  <data name="Inbox_Empty" xml:space="preserve">
+    <value>Nothing awaits your action right now.</value>
+  </data>
+  <data name="Inbox_Employee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="Inbox_Stage" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="Inbox_Score" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Inbox_Band" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="Inbox_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Eval_Title" xml:space="preserve">
+    <value>Evaluation</value>
+  </data>
+  <data name="Eval_Employee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="Eval_Division" xml:space="preserve">
+    <value>Division</value>
+  </data>
+  <data name="Eval_Stage" xml:space="preserve">
+    <value>Current stage</value>
+  </data>
+  <data name="Eval_Score" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Eval_Band" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="Eval_Competencies" xml:space="preserve">
+    <value>Competencies</value>
+  </data>
+  <data name="Eval_Objectives" xml:space="preserve">
+    <value>Objectives</value>
+  </data>
+  <data name="Eval_Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="Eval_Rating" xml:space="preserve">
+    <value>Rating (1–5)</value>
+  </data>
+  <data name="Eval_ApprovalChain" xml:space="preserve">
+    <value>Approval chain</value>
+  </data>
+  <data name="Eval_Approver" xml:space="preserve">
+    <value>Approver</value>
+  </data>
+  <data name="Eval_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Eval_Submit" xml:space="preserve">
+    <value>Submit evaluation</value>
+  </data>
+  <data name="Eval_Approve" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Eval_Return" xml:space="preserve">
+    <value>Return for rework</value>
+  </data>
+  <data name="Eval_NoAction" xml:space="preserve">
+    <value>You have no pending action on this evaluation.</value>
+  </data>
+  <data name="Eval_Saved" xml:space="preserve">
+    <value>Saved.</value>
+  </data>
+  <data name="Eval_ManagerHint" xml:space="preserve">
+    <value>Enter a 1–5 rating for each item, then submit.</value>
+  </data>
+  <data name="Calibration_Title" xml:space="preserve">
+    <value>HR Calibration</value>
+  </data>
+  <data name="Calibration_Subtitle" xml:space="preserve">
+    <value>Forced-distribution check per sector. Bands over their cap are flagged.</value>
+  </data>
+  <data name="Calibration_Sector" xml:space="preserve">
+    <value>Sector</value>
+  </data>
+  <data name="Calibration_Total" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="Calibration_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Calibration_Compliant" xml:space="preserve">
+    <value>Compliant</value>
+  </data>
+  <data name="Calibration_NonCompliant" xml:space="preserve">
+    <value>Over quota</value>
+  </data>
+  <data name="Calibration_Band" xml:space="preserve">
+    <value>Band</value>
+  </data>
+  <data name="Calibration_Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="Calibration_Percent" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="Calibration_Cap" xml:space="preserve">
+    <value>Cap</value>
+  </data>
+  <data name="Org_Title" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="Org_Employees" xml:space="preserve">
+    <value>employees</value>
+  </data>
+  <data name="Stage_Draft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="Stage_ManagerEvaluation" xml:space="preserve">
+    <value>Manager evaluation</value>
+  </data>
+  <data name="Stage_DepartmentReview" xml:space="preserve">
+    <value>Department review</value>
+  </data>
+  <data name="Stage_SectorApproval" xml:space="preserve">
+    <value>Sector approval</value>
+  </data>
+  <data name="Stage_HrCalibration" xml:space="preserve">
+    <value>HR calibration</value>
+  </data>
+  <data name="Stage_Finalized" xml:space="preserve">
+    <value>Finalized</value>
+  </data>
+  <data name="Band_Unsatisfactory" xml:space="preserve">
+    <value>Unsatisfactory</value>
+  </data>
+  <data name="Band_PartiallyMeets" xml:space="preserve">
+    <value>Partially meets</value>
+  </data>
+  <data name="Band_Meets" xml:space="preserve">
+    <value>Meets</value>
+  </data>
+  <data name="Band_Exceeds" xml:space="preserve">
+    <value>Exceeds</value>
+  </data>
+  <data name="Band_Outstanding" xml:space="preserve">
+    <value>Outstanding</value>
+  </data>
+  <data name="Kind_Competency" xml:space="preserve">
+    <value>Competency</value>
+  </data>
+  <data name="Kind_Objective" xml:space="preserve">
+    <value>Objective</value>
+  </data>
+  <data name="Role_Employee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="Role_LineManager" xml:space="preserve">
+    <value>Line Manager</value>
+  </data>
+  <data name="Role_DepartmentManager" xml:space="preserve">
+    <value>Department Manager</value>
+  </data>
+  <data name="Role_SectorHead" xml:space="preserve">
+    <value>Sector Head</value>
+  </data>
+  <data name="Role_ManagingDirector" xml:space="preserve">
+    <value>Managing Director</value>
+  </data>
+  <data name="Role_HrAdmin" xml:space="preserve">
+    <value>HR Administrator</value>
+  </data>
 </root>

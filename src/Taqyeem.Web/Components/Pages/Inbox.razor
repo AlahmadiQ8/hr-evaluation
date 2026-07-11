@@ -1,0 +1,65 @@
+@page "/inbox"
+@attribute [Authorize]
+@inject TaqyeemApiClient Api
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Inbox_Title"]</PageTitle>
+
+<h1>@L["Inbox_Title"]</h1>
+
+@if (_items is null)
+{
+    <p role="status">@L["Common_Loading"]</p>
+}
+else if (_items.Count == 0)
+{
+    <div class="alert alert-secondary">@L["Inbox_Empty"]</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">@L["Inbox_Employee"]</th>
+                    <th scope="col">@L["Inbox_Stage"]</th>
+                    <th scope="col">@L["Inbox_Score"]</th>
+                    <th scope="col">@L["Inbox_Band"]</th>
+                    <th scope="col"><span class="visually-hidden">@L["Inbox_Open"]</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (EvaluationSummaryDto e in _items)
+                {
+                    <tr>
+                        <td>
+                            <div>@e.EmployeeName.For(Ui.Lang)</div>
+                            <div class="small text-muted">@e.JobTitle.For(Ui.Lang)</div>
+                        </td>
+                        <td><span class="badge text-bg-light">@L[$"Stage_{e.Stage}"]</span></td>
+                        <td>@(e.ScorePercent?.ToString("0.#") ?? "—")</td>
+                        <td>
+                            @if (e.Band is not null)
+                            {
+                                <span class="badge @Ui.BandBadge(e.Band)">@L[$"Band_{e.Band}"]</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary" href="evaluations/@e.Id">@L["Inbox_Open"]</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<EvaluationSummaryDto>? _items;
+
+    protected override async Task OnInitializedAsync() => _items = await Api.GetInboxAsync();
+}

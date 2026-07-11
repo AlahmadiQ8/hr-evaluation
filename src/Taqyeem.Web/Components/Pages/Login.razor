@@ -1,0 +1,39 @@
+@page "/login"
+@inject TaqyeemApiClient Api
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Login_Title"]</PageTitle>
+
+<h1>@L["Login_Title"]</h1>
+<p class="text-muted">@L["Login_Subtitle"]</p>
+
+@if (_personas is null)
+{
+    <p role="status">@L["Common_Loading"]</p>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (PersonaDto p in _personas)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h5 card-title mb-1">@p.Name.For(Ui.Lang)</h2>
+                        <div class="text-muted small mb-2">@p.JobTitle.For(Ui.Lang)</div>
+                        <span class="badge text-bg-light align-self-start mb-3">@L[$"Role_{p.Role}"]</span>
+                        <a class="btn btn-primary w-100 mt-auto" href="demo/login?personaId=@p.Id">
+                            @L["Login_SignInAs"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<PersonaDto>? _personas;
+
+    protected override async Task OnInitializedAsync() => _personas = await Api.GetPersonasAsync();
+}

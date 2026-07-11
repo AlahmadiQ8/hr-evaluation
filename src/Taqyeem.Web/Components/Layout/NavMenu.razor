@@ -15,6 +15,21 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @L["Nav_Home"]
             </NavLink>
         </div>
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="inbox">@L["Nav_Inbox"]</NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="org">@L["Nav_Organization"]</NavLink>
+                </div>
+                <AuthorizeView Roles="HrAdmin" Context="hr">
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="calibration">@L["Nav_Calibration"]</NavLink>
+                    </div>
+                </AuthorizeView>
+            </Authorized>
+        </AuthorizeView>
     </nav>
 </div>
 

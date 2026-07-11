@@ -7,7 +7,33 @@
 
 <p class="lead">@L["Welcome_Body"]</p>
 
-<div class="alert alert-info" role="note">
-    <span class="bi bi-info-circle" aria-hidden="true"></span>
-    @L["Welcome_DemoNote"]
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="row g-3 mt-2">
+            <div class="col-md-4">
+                <a class="btn btn-outline-primary w-100 py-3" href="inbox">
+                    <span class="bi bi-inbox" aria-hidden="true"></span> @L["Nav_Inbox"]
+                </a>
+            </div>
+            <AuthorizeView Roles="HrAdmin" Context="hr">
+                <div class="col-md-4">
+                    <a class="btn btn-outline-primary w-100 py-3" href="calibration">
+                        <span class="bi bi-sliders" aria-hidden="true"></span> @L["Nav_Calibration"]
+                    </a>
+                </div>
+            </AuthorizeView>
+            <div class="col-md-4">
+                <a class="btn btn-outline-primary w-100 py-3" href="org">
+                    <span class="bi bi-diagram-3" aria-hidden="true"></span> @L["Nav_Organization"]
+                </a>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-info" role="note">
+            <span class="bi bi-info-circle" aria-hidden="true"></span>
+            @L["Welcome_DemoNote"]
+            <a href="login" class="alert-link ms-1">@L["Login_SignInAs"]</a>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>

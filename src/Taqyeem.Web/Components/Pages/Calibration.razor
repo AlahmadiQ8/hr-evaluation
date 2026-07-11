@@ -1,0 +1,67 @@
+@page "/calibration"
+@attribute [Authorize(Roles = "HrAdmin")]
+@inject TaqyeemApiClient Api
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Calibration_Title"]</PageTitle>
+
+<h1>@L["Calibration_Title"]</h1>
+<p class="text-muted">@L["Calibration_Subtitle"]</p>
+
+@if (_sectors is null)
+{
+    <p role="status">@L["Common_Loading"]</p>
+}
+else
+{
+    foreach (CalibrationDto sector in _sectors)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-semibold">@sector.SectorName.For(Ui.Lang)</span>
+                <span>
+                    <span class="text-muted small me-2">@sector.Total @L["Calibration_Total"]</span>
+                    @if (sector.IsCompliant)
+                    {
+                        <span class="badge text-bg-success">@L["Calibration_Compliant"]</span>
+                    }
+                    else
+                    {
+                        <span class="badge text-bg-danger">@L["Calibration_NonCompliant"]</span>
+                    }
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">@L["Calibration_Band"]</th>
+                                <th scope="col" class="text-end">@L["Calibration_Count"]</th>
+                                <th scope="col" class="text-end">@L["Calibration_Percent"]</th>
+                                <th scope="col" class="text-end">@L["Calibration_Cap"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (BandDistributionDto d in sector.Distribution)
+                            {
+                                <tr class="@(d.IsOverQuota ? "table-danger" : null)">
+                                    <td><span class="badge @Ui.BandBadge(d.Band)">@L[$"Band_{d.Band}"]</span></td>
+                                    <td class="text-end">@d.Count</td>
+                                    <td class="text-end">@d.Percent.ToString("0.#")%</td>
+                                    <td class="text-end">@(d.AllowedMax?.ToString() ?? "—")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private List<CalibrationDto>? _sectors;
+
+    protected override async Task OnInitializedAsync() => _sectors = await Api.GetCalibrationAsync();
+}

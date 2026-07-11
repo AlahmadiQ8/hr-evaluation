@@ -94,4 +94,211 @@
   <data name="Reload" xml:space="preserve">
     <value>إعادة تحميل</value>
   </data>
+  <data name="Nav_Inbox" xml:space="preserve">
+    <value>صندوق الوارد</value>
+  </data>
+  <data name="Nav_Calibration" xml:space="preserve">
+    <value>معايرة الموارد البشرية</value>
+  </data>
+  <data name="Nav_Organization" xml:space="preserve">
+    <value>الهيكل التنظيمي</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>اختر شخصية العرض</value>
+  </data>
+  <data name="Login_Subtitle" xml:space="preserve">
+    <value>سجّل الدخول بأي شخصية مُدخلة مسبقًا — بدون كلمة مرور. جميع البيانات افتراضية.</value>
+  </data>
+  <data name="Login_SignInAs" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="Persona_SignedInAs" xml:space="preserve">
+    <value>مُسجّل باسم</value>
+  </data>
+  <data name="Persona_SignOut" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+  <data name="Common_Loading" xml:space="preserve">
+    <value>جارٍ التحميل…</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="Common_None" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="Inbox_Title" xml:space="preserve">
+    <value>صندوق الوارد</value>
+  </data>
+  <data name="Inbox_Empty" xml:space="preserve">
+    <value>لا يوجد ما ينتظر إجراءك حاليًا.</value>
+  </data>
+  <data name="Inbox_Employee" xml:space="preserve">
+    <value>الموظف</value>
+  </data>
+  <data name="Inbox_Stage" xml:space="preserve">
+    <value>المرحلة</value>
+  </data>
+  <data name="Inbox_Score" xml:space="preserve">
+    <value>الدرجة</value>
+  </data>
+  <data name="Inbox_Band" xml:space="preserve">
+    <value>التقدير</value>
+  </data>
+  <data name="Inbox_Open" xml:space="preserve">
+    <value>فتح</value>
+  </data>
+  <data name="Eval_Title" xml:space="preserve">
+    <value>التقييم</value>
+  </data>
+  <data name="Eval_Employee" xml:space="preserve">
+    <value>الموظف</value>
+  </data>
+  <data name="Eval_Division" xml:space="preserve">
+    <value>القسم</value>
+  </data>
+  <data name="Eval_Stage" xml:space="preserve">
+    <value>المرحلة الحالية</value>
+  </data>
+  <data name="Eval_Score" xml:space="preserve">
+    <value>الدرجة</value>
+  </data>
+  <data name="Eval_Band" xml:space="preserve">
+    <value>التقدير</value>
+  </data>
+  <data name="Eval_Competencies" xml:space="preserve">
+    <value>الجدارات</value>
+  </data>
+  <data name="Eval_Objectives" xml:space="preserve">
+    <value>الأهداف</value>
+  </data>
+  <data name="Eval_Weight" xml:space="preserve">
+    <value>الوزن</value>
+  </data>
+  <data name="Eval_Rating" xml:space="preserve">
+    <value>التقييم (١–٥)</value>
+  </data>
+  <data name="Eval_ApprovalChain" xml:space="preserve">
+    <value>سلسلة الاعتماد</value>
+  </data>
+  <data name="Eval_Approver" xml:space="preserve">
+    <value>المعتمِد</value>
+  </data>
+  <data name="Eval_Comment" xml:space="preserve">
+    <value>ملاحظة</value>
+  </data>
+  <data name="Eval_Submit" xml:space="preserve">
+    <value>اعتماد التقييم</value>
+  </data>
+  <data name="Eval_Approve" xml:space="preserve">
+    <value>اعتماد</value>
+  </data>
+  <data name="Eval_Return" xml:space="preserve">
+    <value>إعادة للمراجعة</value>
+  </data>
+  <data name="Eval_NoAction" xml:space="preserve">
+    <value>لا يوجد إجراء معلّق لك على هذا التقييم.</value>
+  </data>
+  <data name="Eval_Saved" xml:space="preserve">
+    <value>تم الحفظ.</value>
+  </data>
+  <data name="Eval_ManagerHint" xml:space="preserve">
+    <value>أدخل تقييمًا من ١ إلى ٥ لكل بند ثم اعتمد.</value>
+  </data>
+  <data name="Calibration_Title" xml:space="preserve">
+    <value>معايرة الموارد البشرية</value>
+  </data>
+  <data name="Calibration_Subtitle" xml:space="preserve">
+    <value>فحص التوزيع الإلزامي لكل قطاع. تُعلَّم التقديرات التي تتجاوز الحد.</value>
+  </data>
+  <data name="Calibration_Sector" xml:space="preserve">
+    <value>القطاع</value>
+  </data>
+  <data name="Calibration_Total" xml:space="preserve">
+    <value>الموظفون</value>
+  </data>
+  <data name="Calibration_Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="Calibration_Compliant" xml:space="preserve">
+    <value>مطابق</value>
+  </data>
+  <data name="Calibration_NonCompliant" xml:space="preserve">
+    <value>تجاوز الحصة</value>
+  </data>
+  <data name="Calibration_Band" xml:space="preserve">
+    <value>التقدير</value>
+  </data>
+  <data name="Calibration_Count" xml:space="preserve">
+    <value>العدد</value>
+  </data>
+  <data name="Calibration_Percent" xml:space="preserve">
+    <value>النسبة</value>
+  </data>
+  <data name="Calibration_Cap" xml:space="preserve">
+    <value>الحد</value>
+  </data>
+  <data name="Org_Title" xml:space="preserve">
+    <value>الهيكل التنظيمي</value>
+  </data>
+  <data name="Org_Employees" xml:space="preserve">
+    <value>موظفين</value>
+  </data>
+  <data name="Stage_Draft" xml:space="preserve">
+    <value>مسودة</value>
+  </data>
+  <data name="Stage_ManagerEvaluation" xml:space="preserve">
+    <value>تقييم المدير</value>
+  </data>
+  <data name="Stage_DepartmentReview" xml:space="preserve">
+    <value>مراجعة الإدارة</value>
+  </data>
+  <data name="Stage_SectorApproval" xml:space="preserve">
+    <value>اعتماد القطاع</value>
+  </data>
+  <data name="Stage_HrCalibration" xml:space="preserve">
+    <value>معايرة الموارد البشرية</value>
+  </data>
+  <data name="Stage_Finalized" xml:space="preserve">
+    <value>مُعتمد نهائيًا</value>
+  </data>
+  <data name="Band_Unsatisfactory" xml:space="preserve">
+    <value>غير مُرضٍ</value>
+  </data>
+  <data name="Band_PartiallyMeets" xml:space="preserve">
+    <value>يلبي جزئيًا</value>
+  </data>
+  <data name="Band_Meets" xml:space="preserve">
+    <value>يلبي التوقعات</value>
+  </data>
+  <data name="Band_Exceeds" xml:space="preserve">
+    <value>يفوق التوقعات</value>
+  </data>
+  <data name="Band_Outstanding" xml:space="preserve">
+    <value>متميّز</value>
+  </data>
+  <data name="Kind_Competency" xml:space="preserve">
+    <value>جدارة</value>
+  </data>
+  <data name="Kind_Objective" xml:space="preserve">
+    <value>هدف</value>
+  </data>
+  <data name="Role_Employee" xml:space="preserve">
+    <value>موظف</value>
+  </data>
+  <data name="Role_LineManager" xml:space="preserve">
+    <value>رئيس قسم</value>
+  </data>
+  <data name="Role_DepartmentManager" xml:space="preserve">
+    <value>مدير إدارة</value>
+  </data>
+  <data name="Role_SectorHead" xml:space="preserve">
+    <value>رئيس قطاع</value>
+  </data>
+  <data name="Role_ManagingDirector" xml:space="preserve">
+    <value>العضو المنتدب</value>
+  </data>
+  <data name="Role_HrAdmin" xml:space="preserve">
+    <value>مسؤول الموارد البشرية</value>
+  </data>
 </root>

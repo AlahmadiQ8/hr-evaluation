@@ -1,5 +1,9 @@
 using System.Globalization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
+using Taqyeem.Web.Api;
 using Taqyeem.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +16,21 @@ builder.Services.AddRazorComponents()
 
 // Arabic/English localization backed by Resources/SharedResource.*.resx.
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// Demo persona sign-in via cookie auth; the user flows into the Blazor circuit.
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "taqyeem-auth";
+        options.LoginPath = "/login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
+
+// API clients — base address resolved via Aspire service discovery.
+builder.Services.AddHttpClient<TaqyeemApiClient>(client => client.BaseAddress = new Uri("https+http://api"));
+builder.Services.AddHttpClient("api-anon", client => client.BaseAddress = new Uri("https+http://api"));
 
 var app = builder.Build();
 
@@ -34,6 +53,8 @@ app.UseRequestLocalization(new RequestLocalizationOptions()
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures));
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 
 // Sets the culture cookie then returns to the originating page (used by the language toggle).
@@ -48,6 +69,36 @@ app.MapGet("/set-culture", (string culture, string redirectUri, HttpContext http
     }
 
     return Results.LocalRedirect(string.IsNullOrWhiteSpace(redirectUri) ? "/" : redirectUri);
+});
+
+// Demo login: sign in as the selected persona (fetched from the API), then return to the app.
+app.MapGet("/demo/login", async (Guid personaId, HttpContext http, IHttpClientFactory factory, CancellationToken ct) =>
+{
+    HttpClient client = factory.CreateClient("api-anon");
+    List<PersonaDto> personas = await client.GetFromJsonAsync<List<PersonaDto>>("/api/personas", ct) ?? [];
+    PersonaDto? persona = personas.FirstOrDefault(p => p.Id == personaId);
+    if (persona is null)
+    {
+        return Results.LocalRedirect("/login");
+    }
+
+    var identity = new ClaimsIdentity(
+    [
+        new Claim(ClaimTypes.NameIdentifier, persona.Id.ToString()),
+        new Claim(ClaimTypes.Name, persona.Name.En),
+        new Claim("name_ar", persona.Name.Ar),
+        new Claim(ClaimTypes.Role, persona.Role),
+        new Claim("employee_number", persona.EmployeeNumber),
+    ], CookieAuthenticationDefaults.AuthenticationScheme);
+
+    await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+    return Results.LocalRedirect("/");
+});
+
+app.MapGet("/demo/logout", async (HttpContext http) =>
+{
+    await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    return Results.LocalRedirect("/login");
 });
 
 app.MapStaticAssets();

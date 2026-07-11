@@ -1,0 +1,203 @@
+@page "/evaluations/{Id:guid}"
+@attribute [Authorize]
+@inject TaqyeemApiClient Api
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Eval_Title"]</PageTitle>
+
+<a class="btn btn-link px-0 mb-2" href="inbox">&larr; @L["Common_Back"]</a>
+
+@if (_e is null)
+{
+    <p role="status">@L["Common_Loading"]</p>
+}
+else
+{
+    <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
+        <div>
+            <h1 class="h3 mb-1">@_e.EmployeeName.For(Ui.Lang)</h1>
+            <div class="text-muted">
+                @_e.JobTitle.For(Ui.Lang)
+                @if (_e.DivisionName is not null)
+                {
+                    <span>· @_e.DivisionName.For(Ui.Lang)</span>
+                }
+            </div>
+        </div>
+        <div class="text-end">
+            <span class="badge text-bg-light mb-2">@L[$"Stage_{_e.Stage}"]</span>
+            <div>
+                @if (_e.Band is not null)
+                {
+                    <span class="badge @Ui.BandBadge(_e.Band) fs-6">@L[$"Band_{_e.Band}"]</span>
+                    <span class="ms-2 fw-semibold">@_e.ScorePercent?.ToString("0.#")%</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (_error is not null)
+    {
+        <div class="alert alert-danger" role="alert">@_error</div>
+    }
+
+    @RenderItems(L["Eval_Competencies"], _e.Items.Where(i => i.Kind == "Competency"))
+    @RenderItems(L["Eval_Objectives"], _e.Items.Where(i => i.Kind == "Objective"))
+
+    <h2 class="h5 mt-4">@L["Eval_ApprovalChain"]</h2>
+    <ol class="list-group list-group-numbered mb-4">
+        @foreach (ApprovalStepDto step in _e.Steps)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center @(step.Stage == _e.Stage ? "list-group-item-primary" : null)">
+                <span>
+                    <span class="fw-medium">@L[$"Stage_{step.Stage}"]</span>
+                    @if (step.ApproverName is not null)
+                    {
+                        <span class="text-muted">· @step.ApproverName.For(Ui.Lang)</span>
+                    }
+                </span>
+                @if (step.Decision == "Approve")
+                {
+                    <span class="badge text-bg-success">@L["Eval_Approve"]</span>
+                }
+                else if (step.Decision == "Return")
+                {
+                    <span class="badge text-bg-warning">@L["Eval_Return"]</span>
+                }
+            </li>
+        }
+    </ol>
+
+    @if (_e.CanCurrentUserAct)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label" for="comment">@L["Eval_Comment"]</label>
+                    <textarea id="comment" class="form-control" rows="2" @bind="_comment"></textarea>
+                </div>
+                @if (_e.Stage == "ManagerEvaluation")
+                {
+                    <p class="text-muted small">@L["Eval_ManagerHint"]</p>
+                    <button class="btn btn-primary" disabled="@_busy" @onclick="Submit">@L["Eval_Submit"]</button>
+                }
+                else
+                {
+                    <button class="btn btn-success me-2" disabled="@_busy" @onclick="ApproveAsync">@L["Eval_Approve"]</button>
+                    <button class="btn btn-outline-warning" disabled="@_busy" @onclick="ReturnAsync">@L["Eval_Return"]</button>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary">@L["Eval_NoAction"]</div>
+    }
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    private EvaluationDetailDto? _e;
+    private Dictionary<Guid, int> _ratings = [];
+    private string? _comment;
+    private string? _error;
+    private bool _busy;
+    private bool Editable => _e is { CanCurrentUserAct: true, Stage: "ManagerEvaluation" };
+
+    protected override async Task OnInitializedAsync() => await LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _e = await Api.GetEvaluationAsync(Id);
+        _ratings = _e?.Items.ToDictionary(i => i.Id, i => i.Rating ?? 3) ?? [];
+    }
+
+    private async Task Submit()
+    {
+        _busy = true;
+        _error = null;
+        try
+        {
+            var body = new ManagerSubmitRequest(
+                [.. _ratings.Select(kv => new ItemRatingInput(kv.Key, kv.Value))], _comment);
+            await Api.ManagerSubmitAsync(Id, body);
+            _comment = null;
+            await LoadAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private async Task Decide(string decision)
+    {
+        _busy = true;
+        _error = null;
+        try
+        {
+            await Api.DecideAsync(Id, new DecisionRequest(decision, _comment));
+            _comment = null;
+            await LoadAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private Task ApproveAsync() => Decide("Approve");
+
+    private Task ReturnAsync() => Decide("Return");
+
+    private RenderFragment RenderItems(string title, IEnumerable<EvaluationItemDto> items) => __builder =>
+    {
+        <h2 class="h5 mt-4">@title</h2>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">@title</th>
+                        <th scope="col" class="text-end">@L["Eval_Weight"]</th>
+                        <th scope="col" class="text-end" style="width: 8rem">@L["Eval_Rating"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (EvaluationItemDto item in items)
+                    {
+                        <tr>
+                            <td>@item.Name.For(Ui.Lang)</td>
+                            <td class="text-end">@item.Weight.ToString("0.#")%</td>
+                            <td class="text-end">
+                                @if (Editable)
+                                {
+                                    <select class="form-select form-select-sm" aria-label="@item.Name.For(Ui.Lang)"
+                                            value="@_ratings[item.Id]"
+                                            @onchange="e => _ratings[item.Id] = int.Parse(e.Value!.ToString()!)">
+                                        @for (int r = 1; r <= 5; r++)
+                                        {
+                                            <option value="@r">@r</option>
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    @(item.Rating?.ToString() ?? "—")
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    };
+}
