@@ -6,6 +6,10 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="13.4.6" />
+    <!-- Registers the Entra ID (Active Directory) auth providers for Microsoft.Data.SqlClient 7.x,
+         required for managed-identity connections to Azure SQL (Authentication=Active Directory Default).
+         Split out of the core package in SqlClient 6+; only exercised against Azure SQL, not the local container. -->
+    <PackageReference Include="Microsoft.Data.SqlClient.Extensions.Azure" Version="7.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

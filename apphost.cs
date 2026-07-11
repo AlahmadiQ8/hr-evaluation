@@ -2,12 +2,8 @@
 #:package Aspire.Hosting.Azure.Sql@13.4.6
 #:package Aspire.Hosting.Azure.AppContainers@13.4.6
 #:package Aspire.Hosting.Azure.ApplicationInsights@13.4.6
-#:package Aspire.Hosting.Azure.Network@13.4.6
 
 var builder = DistributedApplication.CreateBuilder(args);
-
-// The Azure virtual-network / private-endpoint hosting APIs are still marked experimental.
-#pragma warning disable ASPIREAZURE003
 
 // Build/release version stamped into the deployed apps so the release pipeline can verify the
 // intended release is actually live (exposed at /version). Defaults to "dev" for local runs.
@@ -35,26 +31,12 @@ var web = builder.AddProject("web", "src/Taqyeem.Web/Taqyeem.Web.csproj")
     .WithEnvironment("APP_VERSION", appVersion)
     .WithExternalHttpEndpoints();
 
-// Azure-only wiring (private networking, compute environment, telemetry). Guarded to
-// publish/deploy so local `aspire run` stays a pure local-container experience.
+// Azure-only wiring (compute environment + telemetry). Guarded to publish/deploy so local
+// `aspire run` stays a pure local-container experience with no Azure dependencies.
 if (builder.ExecutionContext.IsPublishMode)
 {
-    // Private networking. The target subscription's governance denies Azure SQL public endpoints
-    // (policy DenyPublicEndpointEnabled), so SQL is reached over a private endpoint and the
-    // Container Apps environment runs in a delegated subnet of a dedicated virtual network.
-    var vnet = builder.AddAzureVirtualNetwork("vnet", "10.0.0.0/16");
-    var acaSubnet = vnet.AddSubnet("containerapps", "10.0.0.0/23");  // ACA needs a /23 delegated subnet
-    var sqlSubnet = vnet.AddSubnet("sqlpe", "10.0.2.0/24");          // SQL private endpoint
-    var sqlScriptSubnet = vnet.AddSubnet("sqlscript", "10.0.3.0/24"); // SQL role-assignment script
-
-    // SQL over a private endpoint; VNet-integrate the admin (role-assignment) deployment script
-    // so it can reach the private server without any public firewall rule.
-    sqlSubnet.AddPrivateEndpoint(sql);
-    sql.WithAdminDeploymentScriptSubnet(sqlScriptSubnet);
-
-    // Azure Container Apps compute environment — VNet-integrated so it can reach private SQL.
-    builder.AddAzureContainerAppEnvironment("aca")
-        .WithDelegatedSubnet(acaSubnet);
+    // Azure Container Apps compute environment — the target for `aspire deploy`.
+    builder.AddAzureContainerAppEnvironment("aca");
 
     // Application Insights — OpenTelemetry configured in ServiceDefaults exports here.
     var insights = builder.AddAzureApplicationInsights("insights");
