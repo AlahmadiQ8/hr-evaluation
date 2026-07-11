@@ -15,6 +15,8 @@ public static class DependencyInjection
         where TBuilder : IHostApplicationBuilder
     {
         builder.AddSqlServerDbContext<TaqyeemDbContext>(connectionName);
+        builder.Services.AddScoped<Taqyeem.Application.Abstractions.ITaqyeemDbContext>(
+            sp => sp.GetRequiredService<TaqyeemDbContext>());
         builder.Services.AddScoped<DemoDataSeeder>();
         return builder;
     }

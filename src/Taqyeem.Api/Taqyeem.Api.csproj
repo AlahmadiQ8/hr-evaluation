@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="4.13.0" />
     <!-- Pin patched Microsoft.OpenApi (transitive 2.0.0 has advisory GHSA-v5pm-xwqc-g5wc). -->
     <PackageReference Include="Microsoft.OpenApi" Version="2.10.0" />
   </ItemGroup>

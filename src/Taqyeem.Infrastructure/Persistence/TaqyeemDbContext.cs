@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Taqyeem.Application.Abstractions;
 using Taqyeem.Domain.Common;
 using Taqyeem.Domain.Evaluations;
 using Taqyeem.Domain.Organization;
@@ -8,7 +9,7 @@ using Taqyeem.Domain.People;
 
 namespace Taqyeem.Infrastructure.Persistence;
 
-public class TaqyeemDbContext(DbContextOptions<TaqyeemDbContext> options) : DbContext(options)
+public class TaqyeemDbContext(DbContextOptions<TaqyeemDbContext> options) : DbContext(options), ITaqyeemDbContext
 {
     public DbSet<Sector> Sectors => Set<Sector>();
     public DbSet<Department> Departments => Set<Department>();
