@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+@using System.Globalization
+@inject IStringLocalizer<SharedResource> L
+@inject NavigationManager Nav
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4 d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">@L["AppName"] <span class="text-muted">· @L["AppTagline"]</span></span>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-muted small" title="@L["Demo_Persona"]">
+                    <span class="bi bi-person-circle" aria-hidden="true"></span>
+                    @L["Demo_Mode"] — @L["Demo_NotSignedIn"]
+                </span>
+                <a href="@CultureSwitchUrl" class="btn btn-sm btn-outline-secondary" rel="nofollow">
+                    <span class="bi bi-translate" aria-hidden="true"></span> @L["Language_Switch"]
+                </a>
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    @L["Error_Unhandled"]
+    <a href="." class="reload">@L["Reload"]</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    private string CultureSwitchUrl
+    {
+        get
+        {
+            var target = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar" ? "en" : "ar";
+            var relative = "/" + Nav.ToBaseRelativePath(Nav.Uri);
+            return $"set-culture?culture={target}&redirectUri={Uri.EscapeDataString(relative)}";
+        }
+    }
+}

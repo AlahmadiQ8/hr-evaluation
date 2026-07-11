@@ -1,0 +1,13 @@
+﻿@page "/"
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["AppName"] · @L["AppTagline"]</PageTitle>
+
+<h1>@L["Welcome_Title"]</h1>
+
+<p class="lead">@L["Welcome_Body"]</p>
+
+<div class="alert alert-info" role="note">
+    <span class="bi bi-info-circle" aria-hidden="true"></span>
+    @L["Welcome_DemoNote"]
+</div>

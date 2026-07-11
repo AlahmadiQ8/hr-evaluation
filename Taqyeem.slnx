@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Taqyeem.Api/Taqyeem.Api.csproj" />
+    <Project Path="src/Taqyeem.Application/Taqyeem.Application.csproj" />
+    <Project Path="src/Taqyeem.Domain/Taqyeem.Domain.csproj" />
+    <Project Path="src/Taqyeem.Infrastructure/Taqyeem.Infrastructure.csproj" />
+    <Project Path="src/Taqyeem.ServiceDefaults/Taqyeem.ServiceDefaults.csproj" />
+    <Project Path="src/Taqyeem.Web/Taqyeem.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Taqyeem.Application.Tests/Taqyeem.Application.Tests.csproj" />
+  </Folder>
+</Solution>
