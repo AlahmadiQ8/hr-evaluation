@@ -15,6 +15,10 @@ project.fragment.lock.json
 artifacts/
 .dotnet/
 
+# Aspire deploy/publish output (generated; regenerate with `aspire publish`)
+aspire-output/
+infra-preview/
+
 # Test / coverage
 [Tt]est[Rr]esult*/
 [Cc]overage*/
