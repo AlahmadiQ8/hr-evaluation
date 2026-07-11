@@ -344,7 +344,7 @@ public sealed class DemoDataSeeder(
         // Guarantee a visible quota violation in the Investment sector: three Outstanding, finalized.
         ForceOutstanding("LM-INV-FI-GOV");
         ForceOutstanding("DEP-INV-EQ");
-        ForceOutstanding("EMP-MIDYEAR");
+        ForceOutstanding("EMP-002");
     }
 
     private (EvaluationStage, RatingBand) ScenarioFor(
