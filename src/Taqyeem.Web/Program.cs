@@ -30,8 +30,22 @@ builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 
 // API clients — base address resolved via Aspire service discovery.
-builder.Services.AddHttpClient<TaqyeemApiClient>(client => client.BaseAddress = new Uri("https+http://api"));
-builder.Services.AddHttpClient("api-anon", client => client.BaseAddress = new Uri("https+http://api"));
+IHttpClientBuilder typedApiClient = builder.Services.AddHttpClient<TaqyeemApiClient>(
+    client => client.BaseAddress = new Uri("https+http://api"));
+IHttpClientBuilder anonymousApiClient = builder.Services.AddHttpClient("api-anon",
+    client => client.BaseAddress = new Uri("https+http://api"));
+
+// In development (incl. CI E2E), trust the local API's self-signed dev certificate.
+if (builder.Environment.IsDevelopment())
+{
+    typedApiClient.ConfigurePrimaryHttpMessageHandler(DevCertHandler);
+    anonymousApiClient.ConfigurePrimaryHttpMessageHandler(DevCertHandler);
+}
+
+static HttpClientHandler DevCertHandler() => new()
+{
+    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
+};
 
 var app = builder.Build();
 

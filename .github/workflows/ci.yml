@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+
+jobs:
+  build-test:
+    name: Build & unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore Taqyeem.slnx
+
+      - name: Build
+        run: dotnet build Taqyeem.slnx --no-restore --configuration Release
+
+      - name: Unit tests (scoring / routing / quota engines)
+        run: dotnet test tests/Taqyeem.Application.Tests/Taqyeem.Application.Tests.csproj --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: '**/TestResults/*.trx'
+          if-no-files-found: ignore
+
+  e2e:
+    name: End-to-end (Playwright)
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      # Kestrel needs a dev certificate for the HTTPS endpoints. It stays untrusted;
+      # Playwright ignores HTTPS errors and the Web trusts it via the dev-cert bypass.
+      - name: Create HTTPS dev certificate
+        run: dotnet dev-certs https
+
+      - name: Install Aspire CLI
+        run: |
+          curl -sSL https://aspire.dev/install.sh | bash
+          echo "$HOME/.aspire/bin" >> "$GITHUB_PATH"
+
+      - name: Install E2E dependencies
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start the app (Aspire)
+        run: aspire start --non-interactive
+
+      - name: Wait for the app to become healthy
+        run: |
+          for i in $(seq 1 90); do
+            if curl -skf https://localhost:7248/health >/dev/null 2>&1 \
+               && curl -sk https://localhost:7039/ -o /dev/null; then
+              echo "App is up."; exit 0
+            fi
+            sleep 5
+          done
+          echo "App did not become healthy in time." >&2
+          exit 1
+
+      - name: Run Playwright E2E
+        working-directory: e2e
+        env:
+          CI: 'true'
+          BASE_URL: https://localhost:7039
+        run: npx playwright test
+
+      - name: Stop the app
+        if: always()
+        run: aspire stop || true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e/playwright-report
+          if-no-files-found: ignore
