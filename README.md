@@ -139,9 +139,9 @@ aspire stop
 ## Azure deployment
 
 Two environments — **staging** and **production** — separated by resource group, deployed
-**Aspire-native** (`aspire deploy`). The local SQL Server maps to a private **Azure SQL Database**,
-and the API + Blazor UI run on **Azure Container Apps** (only the web app is public) with managed
-identity, Application Insights, and a virtual network. See
+**Aspire-native** (`aspire deploy`). The local SQL Server maps to **Azure SQL Database** (managed-identity
+auth), and the API + Blazor UI run on **Azure Container Apps** (only the web app is public) with
+Application Insights and a container registry. See
 [`docs/azure-deployment.md`](docs/azure-deployment.md) for setup, gating, and verification.
 
 ## License
