@@ -71,3 +71,12 @@ jobs:
         run: |
           chmod +x ./.github/scripts/verify-deployment.sh
           ./.github/scripts/verify-deployment.sh
+
+      - name: Configure Azure Monitor alerts
+        env:
+          RG: ${{ vars.AZURE_RESOURCE_GROUP }}
+          ENVIRONMENT_NAME: staging
+          ALERT_EMAIL: ${{ vars.ALERT_EMAIL }}
+        run: |
+          chmod +x ./.github/scripts/setup-alerts.sh
+          ./.github/scripts/setup-alerts.sh

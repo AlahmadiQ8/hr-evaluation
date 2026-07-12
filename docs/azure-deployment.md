@@ -102,8 +102,8 @@ Create two environments under **Settings → Environments**:
 
 | Environment | Variables | Secrets | Protection |
 |---|---|---|---|
-| `staging` | `AZURE_LOCATION`, `AZURE_RESOURCE_GROUP=rg-taqyeem-stg` | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` | — |
-| `production` | `AZURE_LOCATION`, `AZURE_RESOURCE_GROUP=rg-taqyeem-production` | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` | **required reviewers** (+ optional tag rule) |
+| `staging` | `AZURE_LOCATION`, `AZURE_RESOURCE_GROUP=rg-taqyeem-stg`, `ALERT_EMAIL` (optional) | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` | — |
+| `production` | `AZURE_LOCATION`, `AZURE_RESOURCE_GROUP=rg-taqyeem-production`, `ALERT_EMAIL` (optional) | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` | **required reviewers** (+ optional tag rule) |
 
 `AZURE_CLIENT_ID` is the app registration's `appId`. Use a region where Azure Container Apps and
 Azure SQL both have capacity (this deployment uses `centralus`).
@@ -132,6 +132,46 @@ FQDN=$(az containerapp list -g "$Azure__ResourceGroup" \
   --query "[?contains(name,'web')].properties.configuration.ingress.fqdn | [0]" -o tsv)
 curl -fsS "https://$FQDN/health" && curl -fsS "https://$FQDN/version"
 ```
+
+## Monitoring & alerts
+
+Azure Monitor **emails the team when the app is down or erroring**, in both environments. The alert
+resources are defined in [`infra/alerts.bicep`](../infra/alerts.bicep) and applied **after each
+deploy** by [`.github/scripts/setup-alerts.sh`](../.github/scripts/setup-alerts.sh) (a step in both
+deploy workflows). Re-applying is idempotent — `az deployment group create` upserts by name. They
+build on the **Application Insights** + **Log Analytics** the AppHost already provisions, so no extra
+telemetry wiring is needed.
+
+| Alert | Signal | Severity | Fires when |
+|---|---|---|---|
+| **Availability** | Application Insights **Standard availability test** pinging the public web app `https://<fqdn>/health` from 5 regions every 5 min | Sev 1 | ≥ 2 test regions report the endpoint unreachable / non‑200 |
+| **Server errors** | web Container App `Requests` metric, dimension `statusCodeCategory = 5xx` | Sev 2 | > 10 HTTP 5xx responses (Total) in a 5‑minute window |
+
+Both notify a single **email action group** (`ag-taqyeem-<env>`).
+
+### Configure the recipient
+
+The alert email defaults to the value in `infra/alerts.bicep`. To change it per environment without
+editing Bicep, set an **`ALERT_EMAIL`** GitHub Environment variable (Settings → Environments →
+staging / production); the deploy step passes it through, and if unset the Bicep default is used.
+
+Because the availability test needs the **runtime web FQDN** and the **Application Insights resource
+id** (both only known after `aspire deploy`), the script resolves them from the resource group and
+then applies the module — this is why alerts are configured post-deploy rather than in `apphost.cs`.
+
+### Run it manually
+
+```bash
+RG="rg-taqyeem-stg" ENVIRONMENT_NAME="staging" ALERT_EMAIL="team@example.com" \
+  ./.github/scripts/setup-alerts.sh
+```
+
+Tune thresholds and regions via the module's parameters (`availabilityFailedLocationCount`,
+`fivexxThreshold`, `testLocationIds`).
+
+> **Note:** the web app's `/health` currently reflects the web app's own liveness. To make the
+> availability test represent end-to-end health (including the API), extend the web app's health
+> checks to also probe the API.
 
 ## Reviewable IaC
 
