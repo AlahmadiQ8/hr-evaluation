@@ -25,6 +25,10 @@ every service, and it is built to be both human- and agent-friendly.
 
 ## Architecture
 
+> 📊 **Diagrams:** see [`docs/architecture.md`](docs/architecture.md) for the local-dev
+> (`aspire run`) and Azure deployment (`aspire deploy`) topologies, rendered with Azure
+> service icons.
+
 ```
 apphost.cs                     file-based Aspire AppHost (SQL + API + Web)
 src/
