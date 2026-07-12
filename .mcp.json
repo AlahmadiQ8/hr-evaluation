@@ -6,10 +6,6 @@
         "agent",
         "mcp"
       ]
-    },
-    "azure-icons": {
-      "command": "uvx",
-      "args": ["--from", "git+https://github.com/AlahmadiQ8/icons#subdirectory=mcp-server", "azure-icons-mcp"]
     }
   }
 }
