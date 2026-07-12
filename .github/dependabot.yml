@@ -1,0 +1,46 @@
+# Dependabot configuration — keeps dependencies patched across the whole stack.
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # .NET / NuGet — scans every *.csproj in the repo (src/ and tests/).
+  - package-ecosystem: nuget
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - dotnet
+    groups:
+      dotnet-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # Node / npm — the Playwright end-to-end test project.
+  - package-ecosystem: npm
+    directory: "/e2e"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - javascript
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # GitHub Actions used by the CI/CD and CodeQL workflows.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - github-actions
+    groups:
+      github-actions:
+        patterns:
+          - "*"
