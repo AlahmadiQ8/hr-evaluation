@@ -5,16 +5,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="13.4.6" />
+    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="13.6.0" />
     <!-- Azure.Identity is referenced directly (not via Microsoft.Data.SqlClient.Extensions.Azure)
          so a custom SqlAuthenticationProvider can acquire managed-identity tokens for Azure SQL.
          The Extensions.Azure provider relies on reflection-based assembly loading that fails in
          trimmed container publishes; a static reference here guarantees the assembly is included. -->
-    <PackageReference Include="Azure.Identity" Version="1.14.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.19.1" />
   </ItemGroup>
 
   <PropertyGroup>
